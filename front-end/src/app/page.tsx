@@ -125,6 +125,41 @@ export default function Home() {
 
             {/* Upload de Vídeo */}
             <VideoUpload onUploadSuccess={handleUploadSuccess} />
+
+            {/* Informação sobre Teste P2P */}
+            <div className="bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-2xl border border-blue-500/30 shadow-xl overflow-hidden">
+              <div className="p-5">
+                <div className="flex items-start gap-4">
+                  <div className="text-3xl flex-shrink-0">🌐</div>
+                  <div className="flex-1">
+                    <h3 className="text-white font-bold text-base mb-2 flex items-center gap-2">
+                      <span className="w-1 h-5 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></span>
+                      <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                        Teste a Rede P2P
+                      </span>
+                    </h3>
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      Para testar a funcionalidade P2P e ver a economia de CDN em ação,{' '}
+                      <span className="font-semibold text-blue-300">abra este mesmo vídeo em outras abas do navegador</span>.
+                      Quanto mais abas abertas, maior será a economia de CDN através do compartilhamento P2P entre os peers.
+                    </p>
+                    <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                      <p className="text-gray-300 text-xs leading-relaxed">
+                        <span className="font-semibold text-blue-300">💡 Importante:</span> Se você fizer upload de um novo vídeo,{' '}
+                        <span className="font-semibold text-purple-300">certifique-se de abrir o mesmo vídeo em todas as outras abas</span>{' '}
+                        para que o P2P funcione corretamente. Cada vídeo forma sua própria rede P2P independente.
+                      </p>
+                    </div>
+                    <div className="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                        <span>Peers conectados aparecem no gráfico</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
