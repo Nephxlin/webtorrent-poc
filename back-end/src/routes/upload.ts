@@ -42,7 +42,7 @@ const upload = multer({
   },
 });
 
-router.post('/', upload.single('video'), async (req, res) => {
+router.post('/', upload.single('video') as any, async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'Nenhum arquivo enviado' });

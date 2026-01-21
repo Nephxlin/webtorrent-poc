@@ -14,6 +14,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Criar diretório public se não existir
+RUN mkdir -p public
+
 # Build da aplicação Next.js
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN yarn build
@@ -28,7 +31,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Copiar diretório public (criado no builder)
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Copiar arquivos standalone do Next.js
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
