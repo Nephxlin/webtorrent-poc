@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # Tracker WebTorrent
+  tracker:
+    build:
+      context: ./tracker
+      dockerfile: Dockerfile
+    container_name: poc-webtorrent-tracker
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./tracker/config.json:/app/config.json:ro
+    restart: unless-stopped
+    networks:
+      - p2p-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); http.get('http://localhost:8000', (r) => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Backend API
+  backend:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    container_name: poc-webtorrent-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - FRONTEND_URL=http://localhost:3000
+      - NODE_ENV=production
+    volumes:
+      - ./back-end/uploads:/app/uploads
+      - ./back-end/videos:/app/videos
+      - ./back-end/conversions:/app/conversions
+    restart: unless-stopped
+    networks:
+      - p2p-network
+    depends_on:
+      tracker:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Next.js
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: poc-webtorrent-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_TRACKER_URL=ws://localhost:8000
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - p2p-network
+    depends_on:
+      backend:
+        condition: service_healthy
+      tracker:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)}).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  p2p-network:
+    driver: bridge
+
+volumes:
+  uploads:
+  videos:
+  conversions:

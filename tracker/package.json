@@ -1,0 +1,22 @@
+{
+  "name": "poc-webtorrent-tracker",
+  "version": "1.0.0",
+  "description": "WebTorrent tracker for P2P video streaming",
+  "type": "module",
+  "scripts": {
+    "dev": "node --import tsx ./node_modules/wt-tracker/src/run-tracker.ts config.json",
+    "start": "node --import tsx ./node_modules/wt-tracker/src/run-tracker.ts config.json"
+  },
+  "keywords": [
+    "webtorrent",
+    "tracker",
+    "p2p",
+    "webrtc"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "tsx": "^4.7.0",
+    "wt-tracker": "github:Novage/wt-tracker"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}
